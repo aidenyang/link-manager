@@ -1,4 +1,4 @@
-var url = "http://localhost:5000/links";
+var url = "http://link-manager.herokuapp.com/links";
 
 chrome.tabs.getSelected(function(tab) {
 	$('#url').val(tab.url);

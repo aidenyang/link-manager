@@ -1,0 +1,7 @@
+mysql://b33c15312e395d:ab990249@us-cdbr-east-06.cleardb.net/heroku_493f996d425a69e?reconnect=true
+
+mysql --host=us-cdbr-east-06.cleardb.net --user=b33c15312e395d --password=ab990249 --reconnect heroku_493f996d425a69e < dump.sql
+
+grant SELECT,INSERT,UPDATE,DELETE ON heroku_493f996d425a69e .* TO b33c15312e395d@us-cdbr-east-06.cleardb.net;
+
+mysqldump -u b33c15312e395d -p -h us-cdbr-east-06.cleardb.net heroku_493f996d425a69e < dump.sql

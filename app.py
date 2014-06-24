@@ -1,11 +1,13 @@
 #!flask/bin/python
 from flask import Flask, request, jsonify, abort
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.heroku import Heroku
 
 app = Flask(__name__)
+heroku = Heroku(app)
 db = SQLAlchemy(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:231137@localhost/link'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://b33c15312e395d:ab990249@us-cdbr-east-06.cleardb.net/heroku_493f996d425a69e'
 
 class Link(db.Model):
     __tablename__ = 'link'

@@ -6,5 +6,7 @@ MarkupSafe==0.23
 MySQL-python==1.2.5
 SQLAlchemy==0.9.4
 Werkzeug==0.9.6
+flask-heroku==0.1.9
 itsdangerous==0.24
+psycopg2==2.5.3
 wsgiref==0.1.2

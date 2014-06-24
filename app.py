@@ -21,11 +21,6 @@ class Link(db.Model):
     type = db.Column(db.Integer)
     date_added = db.Column(db.DateTime)
 
-    def __init__(self, title, author, url, type):
-        self.title = title
-        self.url = url
-        self.author = author
-        self.type = type
 
     def __unicode__(self):
         return '<Link %r>' %self.title

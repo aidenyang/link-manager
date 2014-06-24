@@ -40,6 +40,7 @@ class Link(db.Model):
 
 
 @app.route('/links', methods=['GET'])
+@cross_origin()
 def getAllLinks():
     if request.method == 'GET':
         lim = request.args.get('limit', 10)
@@ -60,6 +61,7 @@ def getAllLinks():
         return jsonify(items=json_results)
 
 @app.route('/links/<int:id>', methods=['GET'])
+@cross_origin()
 def getLinkById(id):
     if request.method == 'GET':
         result = Link.query.filter_by(id=id).first()
@@ -79,6 +81,7 @@ def getLinkById(id):
 
 
 @app.route('/links', methods=['POST'])
+@cross_origin()
 def postLink():
     if request.method == 'POST':
         title = request.form['title']
@@ -92,6 +95,7 @@ def postLink():
 
 
 @app.route('/links/<int:id>', methods=['DELETE'])
+@cross_origin()
 def deleteLink(id):
     if request.method == 'DELETE':
         deleted = Link.query.filter(Link.id==id).delete()

@@ -1,16 +1,19 @@
 #!flask/bin/python
 import os
-from flask import Flask, request, jsonify, abort,make_response, request, current_app
+from flask import Flask, request, jsonify, abort
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.heroku import Heroku
-from datetime import timedelta
-from functools import update_wrapper
 
 app = Flask(__name__)
 heroku = Heroku(app)
 db = SQLAlchemy(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://b33c15312e395d:ab990249@us-cdbr-east-06.cleardb.net/heroku_493f996d425a69e'
+
+from datetime import timedelta
+from flask import make_response, request, current_app
+from functools import update_wrapper
+
 
 def crossdomain(origin=None, methods=None, headers=None,
                 max_age=21600, attach_to_all=True,
@@ -41,12 +44,10 @@ def crossdomain(origin=None, methods=None, headers=None,
                 return resp
 
             h = resp.headers
+
             h['Access-Control-Allow-Origin'] = origin
             h['Access-Control-Allow-Methods'] = get_methods()
             h['Access-Control-Max-Age'] = str(max_age)
-            h['Access-Control-Allow-Credentials'] = 'true'
-            h['Access-Control-Allow-Headers'] = \
-                "Origin, X-Requested-With, Content-Type, Accept, Authorization"
             if headers is not None:
                 h['Access-Control-Allow-Headers'] = headers
             return resp
@@ -85,7 +86,7 @@ class Link(db.Model):
 
 
 @app.route('/links', methods=['GET'])
-@crossdomain(origin='*')
+@crossdomain(origin='*', headers='Content-Type')
 def getAllLinks():
     if request.method == 'GET':
         lim = request.args.get('limit', 10)
@@ -106,7 +107,7 @@ def getAllLinks():
         return jsonify(items=json_results)
 
 @app.route('/links/<int:id>', methods=['GET'])
-@crossdomain(origin='*')
+@crossdomain(origin='*', headers='Content-Type')
 def getLinkById(id):
     if request.method == 'GET':
         result = Link.query.filter_by(id=id).first()
@@ -126,7 +127,7 @@ def getLinkById(id):
 
 
 @app.route('/links', methods=['POST'])
-@crossdomain(origin='*')
+@crossdomain(origin='*', headers='Content-Type')
 def postLink():
     if request.method == 'POST':
         title = request.form['title']
@@ -140,7 +141,7 @@ def postLink():
 
 
 @app.route('/links/<int:id>', methods=['DELETE'])
-@crossdomain(origin='*')
+@crossdomain(origin='*', headers='Content-Type')
 def deleteLink(id):
     if request.method == 'DELETE':
         deleted = Link.query.filter(Link.id==id).delete()

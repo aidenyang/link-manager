@@ -1,14 +1,59 @@
 #!flask/bin/python
-import os
-from flask import Flask, request, jsonify, abort
+import cors, os
+from flask import Flask, request, jsonify, abort,make_response, request, current_app
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.heroku import Heroku
+from datetime import timedelta
+from functools import update_wrapper
 
 app = Flask(__name__)
 heroku = Heroku(app)
 db = SQLAlchemy(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://b33c15312e395d:ab990249@us-cdbr-east-06.cleardb.net/heroku_493f996d425a69e'
+
+def crossdomain(origin=None, methods=None, headers=None,
+                max_age=21600, attach_to_all=True,
+                automatic_options=True):
+    if methods is not None:
+        methods = ', '.join(sorted(x.upper() for x in methods))
+    if headers is not None and not isinstance(headers, basestring):
+        headers = ', '.join(x.upper() for x in headers)
+    if not isinstance(origin, basestring):
+        origin = ', '.join(origin)
+    if isinstance(max_age, timedelta):
+        max_age = max_age.total_seconds()
+
+    def get_methods():
+        if methods is not None:
+            return methods
+
+        options_resp = current_app.make_default_options_response()
+        return options_resp.headers['allow']
+
+    def decorator(f):
+        def wrapped_function(*args, **kwargs):
+            if automatic_options and request.method == 'OPTIONS':
+                resp = current_app.make_default_options_response()
+            else:
+                resp = make_response(f(*args, **kwargs))
+            if not attach_to_all and request.method != 'OPTIONS':
+                return resp
+
+            h = resp.headers
+            h['Access-Control-Allow-Origin'] = origin
+            h['Access-Control-Allow-Methods'] = get_methods()
+            h['Access-Control-Max-Age'] = str(max_age)
+            h['Access-Control-Allow-Credentials'] = 'true'
+            h['Access-Control-Allow-Headers'] = \
+                "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+            if headers is not None:
+                h['Access-Control-Allow-Headers'] = headers
+            return resp
+
+        f.provide_automatic_options = False
+        return update_wrapper(wrapped_function, f)
+    return decorator
 
 class Link(db.Model):
     __tablename__ = 'link'
@@ -40,7 +85,7 @@ class Link(db.Model):
 
 
 @app.route('/links', methods=['GET'])
-@cross_origin()
+@crossdomain(origin='*')
 def getAllLinks():
     if request.method == 'GET':
         lim = request.args.get('limit', 10)
@@ -61,7 +106,7 @@ def getAllLinks():
         return jsonify(items=json_results)
 
 @app.route('/links/<int:id>', methods=['GET'])
-@cross_origin()
+@crossdomain(origin='*')
 def getLinkById(id):
     if request.method == 'GET':
         result = Link.query.filter_by(id=id).first()
@@ -81,7 +126,7 @@ def getLinkById(id):
 
 
 @app.route('/links', methods=['POST'])
-@cross_origin()
+@crossdomain(origin='*')
 def postLink():
     if request.method == 'POST':
         title = request.form['title']
@@ -95,7 +140,7 @@ def postLink():
 
 
 @app.route('/links/<int:id>', methods=['DELETE'])
-@cross_origin()
+@crossdomain(origin='*')
 def deleteLink(id):
     if request.method == 'DELETE':
         deleted = Link.query.filter(Link.id==id).delete()

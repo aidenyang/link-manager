@@ -21,6 +21,11 @@ class Link(db.Model):
     type = db.Column(db.Integer)
     date_added = db.Column(db.DateTime)
 
+    def __init__(self, title, author, url, type):
+        self.title = title
+        self.url = url
+        self.author = author
+        self.type = type
 
     def __unicode__(self):
         return '<Link %r>' %self.title
@@ -85,7 +90,7 @@ def postLink():
         url = request.form['url']
         author = request.form['author']
         type = request.form['type']
-        link = Link(title, url, type)
+        link = Link(self, title, url, type)
         db.session.add(link)
         db.session.commit()
         return jsonify({'link' : link.serialize()}), 201

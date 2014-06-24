@@ -1,5 +1,5 @@
 #!flask/bin/python
-import cors, os
+import os
 from flask import Flask, request, jsonify, abort,make_response, request, current_app
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.heroku import Heroku

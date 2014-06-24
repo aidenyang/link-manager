@@ -90,7 +90,7 @@ def postLink():
         url = request.form['url']
         author = request.form['author']
         type = request.form['type']
-        link = Link(self, title, url, type)
+        link = Link(title, author, url, type)
         db.session.add(link)
         db.session.commit()
         return jsonify({'link' : link.serialize()}), 201

@@ -6,8 +6,10 @@
   "version": "1.0",
 
   "permissions": [
-    "tabs"
+    "tabs",
+    "https://link-manager.herokuapp.com/"
   ],
+  "content_security_policy": "script-src 'self' https://link-manager.herokuapp.com/; object-src 'self' https://link-manager.herokuapp.com",
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "test.html"

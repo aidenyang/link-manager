@@ -6,6 +6,7 @@ from flask.ext.heroku import Heroku
 from cors import crossdomain
 
 app = Flask(__name__)
+app.debug = True
 heroku = Heroku(app)
 db = SQLAlchemy(app)
 
@@ -108,4 +109,4 @@ def deleteLink(id):
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=true)
+    app.run(host='0.0.0.0', port=port)

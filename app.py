@@ -1,6 +1,6 @@
 #!flask/bin/python
 import os
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify, abort, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.heroku import Heroku
 from cors import crossdomain
@@ -40,7 +40,7 @@ class Link(db.Model):
             'date_added': self.date_added
         }
 
-
+# Todo: Get by media type, get by time period, get by 
 @app.route('/links', methods=['GET'])
 @crossdomain(origin='*', headers='Content-Type')
 def getAllLinks():
@@ -106,6 +106,15 @@ def deleteLink(id):
             return "{0} column(s) deleted".format(deleted)
         else:
             return "No columns deleted"
+
+
+@app.route('/mylinks')
+@crossdomain(origin='*', headers='Content-Type')
+def showLinks():
+    title = "This is the title";
+    return render_template('templates/display.html')
+
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

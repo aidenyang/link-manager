@@ -56,6 +56,7 @@ pyobjc-framework-XgridFoundation==2.3.2a0
 python-dateutil==1.5
 pytz==2012d
 scipy==0.11.0
+vboxapi==1.0
 virtualenv==1.11.6
 wsgiref==0.1.2
 xattr==0.6.4

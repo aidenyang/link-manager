@@ -10,7 +10,6 @@ Twisted==12.2.0
 Werkzeug==0.9.6
 altgraph==0.10.1
 bdist-mpkg==0.4.4
-bonjour-py==0.3
 itsdangerous==0.24
 macholib==1.5
 matplotlib==1.1.1

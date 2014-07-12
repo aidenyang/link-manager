@@ -82,7 +82,7 @@ def getLinkById(id):
 
 
 
-@app.route('/links', methods=['POST'])
+@app.route('/links', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*', headers='Content-Type')
 def postLink():
     if request.method == 'POST':

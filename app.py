@@ -42,7 +42,7 @@ class Link(db.Model):
 
 # Todo: Get by media type, get by time period, get by
 @app.route('/links', methods=['GET'])
-@crossdomain(origin='*', headers='Content-Type')
+@crossdomain(origin='*')
 def getAllLinks():
     if request.method == 'GET':
         lim = request.args.get('limit', 10)
@@ -63,7 +63,7 @@ def getAllLinks():
         return jsonify(items=json_results)
 
 @app.route('/links/<int:id>', methods=['GET'])
-@crossdomain(origin='*', headers='Content-Type')
+@crossdomain(origin='*')
 def getLinkById(id):
     if request.method == 'GET':
         result = Link.query.filter_by(id=id).first()
@@ -83,7 +83,7 @@ def getLinkById(id):
 
 
 @app.route('/links', methods=['POST', 'OPTIONS'])
-@crossdomain(origin='*', headers='Content-Type')
+@crossdomain(origin='*')
 def postLink():
     if request.method == 'POST':
         title = request.form['title']
@@ -93,11 +93,13 @@ def postLink():
         link = Link(title, author, url, type)
         db.session.add(link)
         db.session.commit()
-        return jsonify({'link' : link.serialize()}), 201
+        response = jsonify({'link' : link.serialize()}), 201
+        response.headers['Access-Control-Allow-Origin'] = "*" 
+        return response
 
 
 @app.route('/links/<int:id>', methods=['DELETE', 'OPTIONS'])
-@crossdomain(origin='*', headers='Content-Type')
+@crossdomain(origin='*')
 def deleteLink(id):
     if request.method == 'DELETE':
         deleted = Link.query.filter(Link.id==id).delete()

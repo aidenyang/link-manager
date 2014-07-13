@@ -93,9 +93,7 @@ def postLink():
         link = Link(title, author, url, type)
         db.session.add(link)
         db.session.commit()
-        response = jsonify({'link' : link.serialize()}), 201
-        response.headers['Access-Control-Allow-Origin'] = "*" 
-        return response
+        return jsonify({'link' : link.serialize()}), 201
 
 
 @app.route('/links/<int:id>', methods=['DELETE', 'OPTIONS'])
